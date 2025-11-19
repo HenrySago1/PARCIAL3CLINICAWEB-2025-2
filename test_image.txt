@@ -1,0 +1,4 @@
+"Esta es una imagen de prueba" 
+
+Este es un archivo de prueba para simular una imagen.
+En un entorno real, aquí habría datos de imagen. 

@@ -1,0 +1,1 @@
+<img src="{{ asset('images/aprecia-logo.svg') }}" alt="APRECIA" style="height:28px;" />
