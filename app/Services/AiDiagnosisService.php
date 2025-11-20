@@ -16,7 +16,9 @@ class AiDiagnosisService
         // localhost para pruebas locales
         // $this->apiUrl = 'http://127.0.0.1:5000/api/prediccion';
         // $this->apiUrl = 'https://parcial3clinica-iadiagnosis-2025-2.onrender.com/api/prediccion';
-        $this->apiUrl = 'http://136.114.234.137:5000/api/prediccion';
+        // local laravel y desplegado ia
+        // $this->apiUrl = 'http://136.114.234.137:5000/api/prediccion';
+        $this->apiUrl = env('AI_API_URL', 'http://127.0.0.1:5000/api/prediccion');
     }
     
     /**
