@@ -13,7 +13,10 @@ class AiDiagnosisService
     public function __construct()
     {
         // Asegúrate de que esta URL sea correcta (puerto 5000 para Python)
-        $this->apiUrl = 'http://127.0.0.1:5000/api/prediccion';
+        // localhost para pruebas locales
+        // $this->apiUrl = 'http://127.0.0.1:5000/api/prediccion';
+        // $this->apiUrl = 'https://parcial3clinica-iadiagnosis-2025-2.onrender.com/api/prediccion';
+        $this->apiUrl = 'http://136.114.234.137:5000/api/prediccion';
     }
     
     /**
@@ -63,7 +66,7 @@ class AiDiagnosisService
             }
 
             // Enviar a Python
-            $response = Http::timeout(30)
+            $response = Http::timeout(120)
                 ->attach(
                     'imagen',
                     file_get_contents($fullPath),
