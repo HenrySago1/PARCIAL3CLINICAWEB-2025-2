@@ -54,11 +54,58 @@ class AppointmentResource extends Resource
                             ->required()
                             ->native(false), // Usar el datepicker de Filament
                         
-                        Forms\Components\TimePicker::make('time')
+                        Forms\Components\Select::make('time')
                             ->label('Hora')
                             ->required()
-                            ->seconds(false) // Ocultar segundos
-                            ->minutesStep(30), // Citas cada 30 min
+                            ->options(function (Forms\Get $get) {
+                                $doctorId = $get('doctor_id');
+                                $date = $get('date');
+
+                                if (!$doctorId || !$date) {
+                                    return [];
+                                }
+
+                                // Llamada interna al controlador (o lógica duplicada para rapidez)
+                                // Para hacerlo limpio en Filament, duplicaremos la lógica de generación aquí
+                                // o haríamos una llamada HTTP a la propia API (menos eficiente).
+                                // Duplicamos lógica por simplicidad y performance:
+                                
+                                $doctor = Doctor::find($doctorId);
+                                if (!$doctor) return [];
+
+                                $slots = [];
+                                $interval = 30;
+
+                                $periods = [
+                                    ['start' => $doctor->morning_start, 'end' => $doctor->morning_end],
+                                    ['start' => $doctor->afternoon_start, 'end' => $doctor->afternoon_end],
+                                ];
+
+                                foreach ($periods as $period) {
+                                    // Asegurar que $date sea solo Y-m-d
+                                    $dateOnly = \Carbon\Carbon::parse($date)->format('Y-m-d');
+                                    $start = \Carbon\Carbon::parse($dateOnly . ' ' . $period['start']);
+                                    $end = \Carbon\Carbon::parse($dateOnly . ' ' . $period['end']);
+
+                                    while ($start < $end) {
+                                        $timeStr = $start->format('H:i');
+                                        $slots[$timeStr] = $timeStr; // Key => Label
+                                        $start->addMinutes($interval);
+                                    }
+                                }
+
+                                // Excluir ocupados
+                                $bookedTimes = Appointment::where('doctor_id', $doctorId)
+                                    ->whereDate('date', $date)
+                                    ->where('status', '!=', 'cancelado')
+                                    ->pluck('time')
+                                    ->map(fn($t) => \Carbon\Carbon::parse($t)->format('H:i'))
+                                    ->toArray();
+
+                                return array_diff($slots, $bookedTimes);
+                            })
+                            ->searchable()
+                            ->preload(),
                         
                         Forms\Components\Select::make('status')
                             ->label('Estado')
@@ -69,7 +116,7 @@ class AppointmentResource extends Resource
                                 'cancelado' => 'Cancelado',
                             ])
                             ->required()
-                            ->default('confirmado'), // Si la secretaria lo crea, se confirma
+                            ->default('confirmado'),
                         
                         Forms\Components\Textarea::make('notes')
                             ->label('Notas (Motivo de la cita)')
@@ -185,5 +232,24 @@ class AppointmentResource extends Resource
         /** @var \App\Models\User $user */
         $user = Auth::user();
         return $user->can('view_appointments');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        if ($user->hasRole('doctor')) {
+            // El usuario es doctor, filtrar por su registro de doctor asociado
+            $doctor = $user->doctor;
+            if ($doctor) {
+                $query->where('doctor_id', $doctor->id);
+            } else {
+                // Si es usuario doctor pero no tiene registro de doctor, no ver nada (seguridad)
+                $query->whereRaw('1 = 0'); 
+            }
+        }
+
+        return $query;
     }
 }

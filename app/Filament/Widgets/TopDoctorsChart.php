@@ -4,12 +4,16 @@ namespace App\Filament\Widgets;
 
 use App\Models\Doctor;
 use App\Models\Appointment;
-use Filament\Widgets\BarChartWidget;
+use Filament\Widgets\ChartWidget;
 
-class TopDoctorsChart extends BarChartWidget
+class TopDoctorsChart extends ChartWidget
 {
     protected static ?string $heading = 'Doctores más solicitados';
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 3;
+
+    protected int | string | array $columnSpan = 1;
+
+    protected static ?string $maxHeight = '300px';
 
     protected function getData(): array
     {
@@ -28,11 +32,22 @@ class TopDoctorsChart extends BarChartWidget
                 [
                     'label' => 'Citas asignadas',
                     'data' => $data,
-                    'backgroundColor' => '#3490dc',
+                    'backgroundColor' => [
+                        '#0277BD', // Medical Blue
+                        '#00ACC1', // Cyan
+                        '#00897B', // Teal
+                        '#5E35B1', // Deep Purple
+                        '#3949AB', // Indigo
+                    ],
                 ],
             ],
             'labels' => $labels,
         ];
+    }
+
+    protected function getType(): string
+    {
+        return 'polarArea';
     }
 
     public static function getDefaultColumnSpan(): int|string|array

@@ -1,0 +1,65 @@
+/* Custom Sidebar Style - Light Mode */
+.fi-sidebar {
+    background-color: rgba(44, 153, 243, 0.605) !important;
+    background: linear-gradient(180deg, rgba(2, 119, 189, 0.95) 0%, rgba(1, 87, 155, 0.95) 100%) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Custom Sidebar Style - Dark Mode */
+.dark .fi-sidebar {
+    background-color: rgba(5, 10, 20, 0.95) !important;
+    background: linear-gradient(180deg, rgba(10, 20, 35, 0.98) 0%, rgba(2, 5, 10, 0.98) 100%) !important;
+    /* Very Dark Navy (Almost Black) */
+}
+
+/* --- Text Colors --- */
+
+/* Light Mode: Force Black Text */
+.fi-sidebar * {
+    color: black !important;
+}
+
+/* Dark Mode: Force White Text */
+.dark .fi-sidebar * {
+    color: white !important;
+}
+
+/* --- Light Mode Navigation (Celeste/Light Blue) --- */
+.fi-sidebar-nav-item:hover {
+    background-color: rgba(79, 195, 247, 0.4) !important;
+    /* Celeste transparent */
+}
+
+.fi-sidebar-nav-item-active {
+    background-color: rgba(3, 169, 244, 0.6) !important;
+    /* Brighter Celeste */
+}
+
+/* --- Dark Mode Navigation (Dark Navy) --- */
+.dark .fi-sidebar-nav-item:hover {
+    background-color: rgba(1, 87, 155, 0.6) !important;
+}
+
+.dark .fi-sidebar-nav-item-active {
+    background-color: rgba(1, 87, 155, 0.8) !important;
+}
+
+/* Sidebar Header (Brand) */
+.fi-sidebar-header {
+    background-color: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Specific override for group labels if the wildcard isn't enough */
+.fi-sidebar-group-label,
+.fi-sidebar-group-label span {
+    color: rgb(251, 251, 251) !important;
+    font-weight: 700 !important;
+    opacity: 1 !important;
+    /* Ensure no transparency on text */
+}
+
+/* Icons */
+.fi-sidebar-nav-item-icon {
+    color: white !important;
+}

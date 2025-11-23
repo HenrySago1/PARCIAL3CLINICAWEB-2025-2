@@ -36,6 +36,7 @@ Route::prefix('api')->group(function () {
         Route::get('/user', fn(Request $request) => $request->user()->load('paciente'));
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/doctors', [DoctorController::class, 'index']);
+        Route::get('/doctors/{id}/slots', [DoctorController::class, 'getAvailableSlots']);
 
         Route::prefix('citas')->group(function () {
             Route::get('/', [CitaController::class, 'index']);
