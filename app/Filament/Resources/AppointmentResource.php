@@ -206,11 +206,17 @@ class AppointmentResource extends Resource
     // --- Permisos de Spatie (Corregidos con Auth::user()) ---
     // (Asegúrate de crear estos permisos y asignarlos al rol 'admin'/'secretary')
 
+    // public static function canCreate(): bool
+    // {
+    //     /** @var \App\Models\User $user */
+    //     $user = Auth::user();
+    //     return $user->can('create_appointments');
+    // }
+
     public static function canCreate(): bool
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        return $user->can('create_appointments');
+        // Solo permite si el usuario tiene el permiso 'create_appointments'
+        return auth()->user()->can('create_appointments');
     }
 
     public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
@@ -252,4 +258,5 @@ class AppointmentResource extends Resource
 
         return $query;
     }
+    
 }
