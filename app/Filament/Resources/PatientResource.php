@@ -19,12 +19,10 @@ class PatientResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     
-    // --- TRADUCCIÓN ---
     protected static ?string $navigationLabel = 'Pacientes';
     protected static ?string $modelLabel = 'Paciente';
     protected static ?string $pluralModelLabel = 'Pacientes';
     protected static ?string $navigationGroup = 'Gestión Clínica';
-    // ------------------
 
     public static function form(Form $form): Form
     {
@@ -112,7 +110,7 @@ class PatientResource extends Resource
         $user = Auth::user();
 
         return $user && $user->can('delete_patients');
-        
+
         // return auth()->user()->can('delete_patients');
     }
 
