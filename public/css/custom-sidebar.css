@@ -63,3 +63,24 @@
 .fi-sidebar-nav-item-icon {
     color: white !important;
 }
+
+/* Login Page Background */
+.fi-simple-layout {
+    background-image: url('/images/loginwall.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Ensure the form card is visible against the background */
+.fi-simple-main {
+    background-color: rgba(255, 255, 255, 0.9);
+    /* Light mode fallback/enhancement */
+    border-radius: 1rem;
+}
+
+.dark .fi-simple-main {
+    background-color: rgba(17, 24, 39, 0.9);
+    /* Dark mode transparency */
+}

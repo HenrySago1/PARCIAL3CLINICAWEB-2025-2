@@ -86,19 +86,34 @@ class PatientResource extends Resource
 
     public static function canCreate(): bool
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        
+        return $user && $user->can('create_patients');
         // Solo permite si el usuario tiene el permiso 'create_patients'
-        return auth()->user()->can('create_patients');
+        // return auth()->user()->can('create_patients');
     }
 
     // Opcional: Asegurar también la edición y borrado
     public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        return auth()->user()->can('edit_patients');
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        return $user && $user->can('edit_patients');
+
+
+        // return auth()->user()->can('edit_patients');
     }
 
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        return auth()->user()->can('delete_patients');
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        return $user && $user->can('delete_patients');
+        
+        // return auth()->user()->can('delete_patients');
     }
 
 }

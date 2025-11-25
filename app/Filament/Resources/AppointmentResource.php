@@ -15,6 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AppointmentResource extends Resource
 {
@@ -215,8 +216,16 @@ class AppointmentResource extends Resource
 
     public static function canCreate(): bool
     {
-        // Solo permite si el usuario tiene el permiso 'create_appointments'
-        return auth()->user()->can('create_appointments');
+        /** @var \App\Models\User $user */
+    $user = Auth::user();
+
+    // Verificamos que exista el usuario y tenga el permiso
+    return $user && $user->can('create_appointments');
+
+
+
+        // // Solo permite si el usuario tiene el permiso 'create_appointments'
+        // return auth()->user()->can('create_appointments');
     }
 
     public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
@@ -243,8 +252,14 @@ class AppointmentResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-        $user = Auth::user();
 
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+
+    // Primero validamos que haya un usuario logueado para no romper nada
+    if (!$user) {
+        return $query;
+    }
         if ($user->hasRole('doctor')) {
             // El usuario es doctor, filtrar por su registro de doctor asociado
             $doctor = $user->doctor;
