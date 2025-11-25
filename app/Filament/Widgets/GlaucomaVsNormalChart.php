@@ -26,9 +26,12 @@ class GlaucomaVsNormalChart extends ChartWidget
         
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        if ($user->isDoctor()) {
-             $query->where('doctor_id', $user->doctor->id);
-        }
+        if ($user->isDoctor() && $user->doctor) {
+    $query->where('doctor_id', $user->doctor->id);
+} elseif ($user->isDoctor() && !$user->doctor) {
+    // Si es doctor pero no tiene perfil, no mostrar nada para evitar error
+    $query->whereRaw('1 = 0'); 
+}
         
         $diagnoses = $query->get();
 
